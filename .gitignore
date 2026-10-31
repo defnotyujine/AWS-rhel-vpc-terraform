@@ -1,0 +1,118 @@
+.env
+*.log
+*.retry
+.vagrant
+tests/*redhat-subscription
+tests/Dockerfile
+*.iso
+*.box
+.doc*
+packer_cache
+delete*
+ignore*
+# VSCode
+.vscode
+vagrant
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Linux Editors
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+.elc
+auto-save-list
+tramp
+.\#*
+*.swp
+*.swo
+rh-creds.env
+travis.env
+
+# Secret/key files
+*.vault
+*.key
+*.pem
+*.p12
+*.pfx
+*.keystore
+*.jks
+*.credentials
+*vault_pass*
+.vault_pass
+
+### Eclipse ###
+*.pydevproject
+.metadata
+.gradle
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+
+# Eclipse Core
+.project
+
+# Locally stored "Eclipse launch configurations"
+*.launch
+
+# JDT-specific (Eclipse Java Development Tools)
+# Eclipse
+.classpath
+
+# PDT-specific
+.buildpath
+*.pmd
+
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# Mac
+.DS_Store
+
+# Maven
+log/
+logs/
+target/
+
+# other, project specific
+bootCounter.agent
+coverage-error.log
+
+# jekyll
+_site
+.sass-cache
+**/docs/javadoc/**
+documentation/docs/versionhistory.md
+
+# windows explorer
+desktop.ini
+testAgent_debug.txt
+testAgent_log.txt
+ps-b2bua-test/ps-b2bua-test-integration/testAgent_debug.txt
+ps-b2bua-test/ps-b2bua-test-integration/testAgent_log.txt
+ps-b2bua-test/ps-b2bua-test-integration/logs
+/atlassian-ide-plugin.xml
+
+# Visual Studio
+.vs
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.tfstate.lock.info
+terraform.tfvars
+tfplan
+crash.log

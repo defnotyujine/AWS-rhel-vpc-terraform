@@ -1,0 +1,36 @@
+#!/bin/bash
+# terraform renders this with templatefile() first, a double dollar sign in here becomes a single one
+# no set -e on purpose, if one agent fails the rest still installs
+# to see how it went: sudo tail -50 /var/log/cloud-init-output.log
+set -x
+
+# web server, the page shows which RHEL it's running on
+dnf install -y httpd
+systemctl enable --now httpd
+cat > /var/www/html/index.html <<HTML
+<h1>Hello from ${name} (built with Terraform)</h1>
+<p>OS: $(cat /etc/redhat-release)</p>
+<p>Host: $(hostname)</p>
+HTML
+
+# SSM agent, RHEL doesn't ship it (Amazon Linux does), Session Manager needs it
+dnf install -y https://s3.${region}.amazonaws.com/amazon-ssm-${region}/latest/linux_amd64/amazon-ssm-agent.rpm
+systemctl enable --now amazon-ssm-agent
+
+# CloudWatch agent, basic EC2 metrics can't see memory or disk usage but this can
+dnf install -y https://amazoncloudwatch-agent.s3.amazonaws.com/redhat/amd64/latest/amazon-cloudwatch-agent.rpm
+cat > /opt/aws/amazon-cloudwatch-agent/etc/cwagent-config.json <<'JSON'
+{
+  "agent": { "metrics_collection_interval": 60, "run_as_user": "root" },
+  "metrics": {
+    "append_dimensions": { "InstanceId": "$${aws:InstanceId}" },
+    "metrics_collected": {
+      "mem":  { "measurement": ["mem_used_percent"] },
+      "disk": { "measurement": ["used_percent"], "resources": ["/"] }
+    }
+  }
+}
+JSON
+/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
+  -a fetch-config -m ec2 -s \
+  -c file:/opt/aws/amazon-cloudwatch-agent/etc/cwagent-config.json

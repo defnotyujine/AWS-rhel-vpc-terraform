@@ -1,0 +1,21 @@
+# copy to terraform.tfvars if I want to change something, everything here is optional
+region       = "ap-southeast-1"
+project_name = "tf-lab"
+owner        = "vvolf"
+
+vpc_cidr            = "10.20.0.0/16"
+public_subnet_cidr  = "10.20.1.0/24"
+private_subnet_cidr = "10.20.2.0/24"
+
+# remove a line to deploy fewer servers
+rhel_versions = {
+  rhel8  = "8.10"
+  rhel9  = "9.8"
+  rhel10 = "10.2"
+}
+
+instance_type       = "t3.small"
+ssh_public_key_path = "~/.ssh/tf-lab.pub"
+
+# uncomment to lock SSH to a fixed IP instead of auto-detecting mine
+# ssh_allowed_cidr = "203.0.113.10/32"
