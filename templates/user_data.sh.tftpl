@@ -18,7 +18,6 @@ dnf install -y https://s3.${region}.amazonaws.com/amazon-ssm-${region}/latest/li
 systemctl enable --now amazon-ssm-agent
 
 # CloudWatch agent, basic EC2 metrics can't see memory or disk usage but this can
-# wrote the config by hand, the wizard left me a broken file when it got interrupted
 dnf install -y https://amazoncloudwatch-agent.s3.amazonaws.com/redhat/amd64/latest/amazon-cloudwatch-agent.rpm
 cat > /opt/aws/amazon-cloudwatch-agent/etc/cwagent-config.json <<'JSON'
 {
