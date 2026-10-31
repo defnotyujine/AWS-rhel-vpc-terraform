@@ -1,6 +1,6 @@
 # AWS VPC + RHEL 8/9/10 Web Servers with Terraform
 
-A small AWS lab, first built **by hand in the console** and then rebuilt as **Terraform code**. It provisions an isolated VPC with public and private subnets, an internet gateway, routing, a security group, an IAM role, three hardened RHEL web servers (**RHEL 8, 9 and 10**) and a CloudWatch CPU alarm for each.
+A small AWS lab, first built **by hand in the console** and then rebuilt as **Terraform code**. It provisions an isolated VPC with public and private subnets, an internet gateway, routing, a security group, an IAM role, three RHEL web servers (**RHEL 8, 9 and 10**) and a CloudWatch CPU alarm for each.
 
 > Built manually first, then automated. Understanding each piece by hand made the code much easier to reason about.
 
@@ -39,7 +39,10 @@ A small AWS lab, first built **by hand in the console** and then rebuilt as **Te
 | CloudWatch → Alarms → Create alarm | `aws_cloudwatch_metric_alarm` | `monitoring.tf` |
 | SSH in, install httpd / SSM agent / CloudWatch agent | First-boot script | `templates/user_data.sh.tftpl` |
 
-### Hardening choices
+### Security choices
+
+These are AWS-level settings. The OS is the stock Red Hat image, no OS hardening (e.g. CIS benchmark) is applied.
+
 - SSH restricted to a single `/32` (your current public IP), auto-detected at plan time
 - **IMDSv2 required** (`http_tokens = "required"`)
 - **Encrypted** root volumes
