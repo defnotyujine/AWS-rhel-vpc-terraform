@@ -190,5 +190,4 @@ RHEL instances are **not free tier**: the RHEL licence is billed hourly on top o
 - **The OS never sees its public IP.** The internet gateway does one-to-one NAT at the edge.
 - **Basic EC2 metrics can't see memory or disk usage.** That needs the CloudWatch agent inside the OS.
 - **Timeout vs connection refused** tells you whether to look at the network or the service.
-- An interrupted CloudWatch agent config wizard leaves a truncated config. Writing the JSON by hand is simpler and repeatable.
 - **The newest RHEL image isn't always the newest release.** Red Hat refreshes older minor releases too, so "most recent" can pick 9.6 over 9.8.
