@@ -1,6 +1,6 @@
 # AWS VPC + RHEL 8/9/10 Web Servers with Terraform
 
-A small AWS lab I first built **by hand in the console**, then rebuilt as **Terraform code**. It provisions an isolated VPC with public and private subnets, an internet gateway, routing, a security group, an IAM role, three hardened RHEL web servers (**RHEL 8, 9 and 10**) and a CloudWatch CPU alarm for each.
+A small AWS lab, first built **by hand in the console** and then rebuilt as **Terraform code**. It provisions an isolated VPC with public and private subnets, an internet gateway, routing, a security group, an IAM role, three hardened RHEL web servers (**RHEL 8, 9 and 10**) and a CloudWatch CPU alarm for each.
 
 > Built manually first, then automated. Understanding each piece by hand made the code much easier to reason about.
 
@@ -18,7 +18,7 @@ A small AWS lab I first built **by hand in the console**, then rebuilt as **Terr
    |                                                             |
    |  [ tf-lab-rhel8 ]  [ tf-lab-rhel9 ]  [ tf-lab-rhel10 ]      |
    |    httpd, SSM agent, CloudWatch agent                       |
-   |    SG: 22 from my IP, 80 from anywhere                      |
+   |    SG: 22 from your IP, 80 from anywhere                    |
    |    IAM role: SSM + CloudWatch agent                         |
    ----------------------------------------------------------------
           CloudWatch alarm per instance: CPU > 50% (5 min)
@@ -26,7 +26,7 @@ A small AWS lab I first built **by hand in the console**, then rebuilt as **Terr
 
 ## From console clicks to code
 
-| What I did by hand in the console | Terraform resource | File |
+| Console step (done by hand) | Terraform resource | File |
 |---|---|---|
 | VPC → Create VPC | `aws_vpc` | `network.tf` |
 | VPC → Subnets → Create subnet (public + private) | `aws_subnet` | `network.tf` |
@@ -40,7 +40,7 @@ A small AWS lab I first built **by hand in the console**, then rebuilt as **Terr
 | SSH in, install httpd / SSM agent / CloudWatch agent | First-boot script | `templates/user_data.sh.tftpl` |
 
 ### Hardening choices
-- SSH restricted to a single `/32` (my IP), auto-detected at plan time
+- SSH restricted to a single `/32` (your current public IP), auto-detected at plan time
 - **IMDSv2 required** (`http_tokens = "required"`)
 - **Encrypted** root volumes
 - IAM **role** instead of stored access keys
@@ -63,7 +63,7 @@ Red Hat publishes several minor releases side by side (for example 9.6 and 9.8),
 ## Prerequisites
 
 - Terraform >= 1.6
-- AWS CLI with a profile that can create VPC, EC2, IAM and CloudWatch resources. I use an IAM user (not root) saved as the `tf-lab` profile:
+- AWS CLI with a profile that can create VPC, EC2, IAM and CloudWatch resources. This lab uses an IAM user (not root) saved as the `tf-lab` profile:
   ```bash
   aws configure --profile tf-lab
   aws sts get-caller-identity --profile tf-lab
@@ -118,11 +118,11 @@ In the AWS console:
 
 ![VPC resource map](docs/images/02-vpc-resource-map.png)
 
-**EC2 instances**: the three servers next to `wolf-web-01`, the one I built by hand in the console first.
+**EC2 instances**: the three servers next to `wolf-web-01`, the instance built by hand in the console first.
 
 ![EC2 instances](docs/images/03-ec2-instances.png)
 
-**Security group**: SSH only from my IP, HTTP from anywhere.
+**Security group**: SSH only from your IP, HTTP from anywhere.
 
 ![Security group inbound rules](docs/images/04-security-group.png)
 
@@ -154,7 +154,7 @@ killall yes
 
 ## Break it and fix it
 
-| Break | Symptom from my machine | Meaning |
+| Break | Symptom from the client | Meaning |
 |---|---|---|
 | Remove the HTTP rule from the security group | `curl` hangs, then times out | Traffic silently dropped (firewall / routing) |
 | Remove `0.0.0.0/0 → IGW` from the public route table | Web **and** SSH time out | No path back to the internet |
