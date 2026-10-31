@@ -194,3 +194,7 @@ RHEL instances are **not free tier**: the RHEL licence is billed hourly on top o
 - **Basic EC2 metrics can't see memory or disk usage.** That needs the CloudWatch agent inside the OS.
 - **Timeout vs connection refused** tells you whether to look at the network or the service.
 - **The newest RHEL image isn't always the newest release.** Red Hat refreshes older minor releases too, so "most recent" can pick 9.6 over 9.8.
+
+## CI
+
+Every push and pull request runs [terraform fmt, init and validate](.github/workflows/terraform.yml). No AWS credentials are needed, nothing is deployed.
